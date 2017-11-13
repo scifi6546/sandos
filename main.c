@@ -46,8 +46,8 @@ struct document loadfile(char *file_path){
 	struct document doc;
 	int temp=0;
 	FILE *file = fopen(file_path,"r");
-	doc.string = (char *)malloc(10*sizeof(*doc.string));
-	int length=10;
+	doc.length=10;
+	doc.string = (char *)malloc(doc.length*sizeof(char));
 	int len_doc_read = 0;
 	while(temp != EOF){
 		temp = fgetc(file);
@@ -55,14 +55,15 @@ struct document loadfile(char *file_path){
 			 break;
 		}
 		char_temp[0] = (char) temp;
-		if(length - len_doc_read==1){
-			doc.string = (char *)realloc(doc.string, (length+10)*sizeof(*doc.string));
-			length+=10;
+		if(doc.length - len_doc_read==1){
+			doc.string = (char *)realloc(doc.string, (doc.length+10)*sizeof(*doc.string));
+			doc.length+=10;
 		}
 		len_doc_read++;
 		strcat(doc.string, char_temp);	
 	}
-	doc.string = realloc(doc.string,(length+1)*(sizeof(*doc.string)));
+	doc.string = realloc(doc.string,(doc.length+2)*(sizeof(*doc.string)));
+	doc.length+=2;
 	strcat(doc.string,"\0");
 	if(file != NULL)
 		fclose(file);// I do not why I have to remove
@@ -113,12 +114,12 @@ struct document make_sand_st(int argc, char *argv[]){
 	//return "ALL=(sandos_" + argv[0] + "_" + argv[1] + ") NOPASSWD: /usr/bin" + argv[1];
 }
 struct document concat(struct document start, struct document end){
-	int nlen = strlen(start.string)+ strlen(end.string);
+	int nlen = strlen(start.string)+ strlen(end.string) + 1;
 	struct document out;
-	out.string = realloc(start.string, nlen*sizeof(char));
+	out.string = calloc(nlen,sizeof(char));
 	out.length = nlen;
-	out.string = start.string;
-	strcat(out.string, end.string);
+	out.string = strcat(out.string,start.string);
+	out.string = strcat(out.string, end.string);
 	return out;
 }
 void f_write(char *file_path, struct document in){
@@ -256,8 +257,8 @@ struct document mkpasswdst(struct userarr users){
 }
 char *alloc_string(char* one, char* two){
 	char* temp;
-	temp=(char *)calloc(strlen(two),sizeof(char));
-	strcpy(temp,two);
+	temp=(char *)calloc(strlen(two)+1,sizeof(char));
+	temp = strcpy(temp,two);
 	return temp;
 }
 void edit_sudo(int argc, char *argv[]){
