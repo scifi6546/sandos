@@ -206,8 +206,8 @@ struct user mkusr(){
 }
 struct document mkpasswdst(struct userarr users){
 	struct document doc;
-	doc.string = calloc(40,sizeof(char));
-	doc.length=40;
+	doc.string = calloc(1000,sizeof(char));
+	doc.length=1000;
 	struct document temp;
 	struct document semi;
 	for(int i =0;i<users.length;i++){
@@ -245,6 +245,7 @@ struct document mkpasswdst(struct userarr users){
 				strcat(doc.string,":");
 			}
 			//doc.string=realloc(doc.string,doc.length*sizeof(char));
+			//I edited make
 			doc = concat(doc,temp);	
 		}
 		doc.string=realloc(doc.string,(doc.length+2)*sizeof(char));
