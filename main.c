@@ -127,7 +127,7 @@ void f_write(char *file_path, struct document in){
 	fputs(in.string, file);
 	fclose(file);
 }
-struct userarr find_user(struct document passwd){
+struct userarr find_user(struct document passwd){//this puts /etc/passwd info into users struct
 	int status = 0;
 	int read = 0;
 	char temps[] = " ";
@@ -194,9 +194,9 @@ void analyze_users(){
 }
 struct user mkusr(){
 	struct user out;
-	out.uname=calloc(60,sizeof(*out.uname));
-	out.homedir=calloc(60,sizeof(*out.homedir));
-	out.shell=calloc(60,sizeof(*out.shell));
+	out.uname=calloc(60,sizeof(char));
+	out.homedir=calloc(60,sizeof(char));
+	out.shell=calloc(60,sizeof(char));
 	out.tmpuuid=calloc(60,sizeof(char));
 	out.tmpguid=calloc(60,sizeof(char));
 	out.passwd=calloc(60,sizeof(char));
@@ -237,17 +237,18 @@ struct document mkpasswdst(struct userarr users){
 				temp.string=alloc_string(temp.string,users.users[i].homedir);
 				temp.length=strlen(temp.string);
 			}
-			if(j==6)
+			if(j==6){
 				temp.string=alloc_string(temp.string,users.users[i].shell);
 				temp.length=strlen(temp.string);
+			}
+			doc = concat(doc,temp);
 			if(j<6){
-				doc.length++;
+				doc.length+=2;
 				doc.string = (char*) realloc(doc.string,doc.length*sizeof(char));
-				strcat(doc.string,":");
+				doc.string= strcat(doc.string,":");
 			}
 			//doc.string=realloc(doc.string,doc.length*sizeof(char));
 			//I edited make
-			doc = concat(doc,temp);	
 		}
 		doc.string=realloc(doc.string,(doc.length+2)*sizeof(char));
 		doc.length+=2;
