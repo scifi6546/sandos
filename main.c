@@ -275,12 +275,16 @@ char *alloc_string(char* one, char* two){
 }
 struct userarr add_user(struct userarr users,char* uname,char*  userinfo
 		char* homedir, char shell){
-
-		
+	struct user temp = mkuser();
+	temp.uname=strcpy(temp.uname,uname);	
+	temp.userinfo=strcpy(temp.userinfo,userinfo);
+	temp.homedir=strcpy(temp.homedir,homedir);
+	temp.shell=strcpy(temp.shell,shell);
 		for(int i = 0;i<users.length;i++){
 
 		}
-
+	users.users[length]=temp;
+	users.length++;
 	//this adds new users to userarr
 
 }
