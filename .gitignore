@@ -1,7 +1,6 @@
 *.swp 
 vgcore*
 *.swo
--g
 valgrind
 out
 debug

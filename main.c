@@ -38,6 +38,9 @@ struct user mkusr();
 void edit_sudo(int argc, char *argv[]);
 struct document mkpasswdst(struct userarr users);
 char* alloc_string(char* one, char* two);
+struct userarr set_ints(struct userarr users);
+int gen_uuid(struct userarr users);
+int gen_guid(struct userarr users);
 //stop declaring functions
 
 struct document sudoers;
@@ -181,7 +184,15 @@ struct userarr find_user(struct document passwd){//this puts /etc/passwd info in
 	}
 	user_array.users = users;
 	user_array.length = usernum;
+	user_array=set_ints(user_array);
 	return user_array;
+}
+struct userarr set_ints(struct userarr users){
+	for(int i =0; i<users.length; i++){
+		users.users[i].uuid=atoi(users.users[i].tmpuuid);
+		users.users[i].guid=atoi(users.users[i].tmpguid);
+	}
+	return users;
 }
 void analyze_users(){
 	struct document passwd;
@@ -261,6 +272,24 @@ char *alloc_string(char* one, char* two){
 	temp=(char *)calloc(strlen(two)+1,sizeof(char));
 	temp = strcpy(temp,two);
 	return temp;
+}
+struct userarr add_user(struct userarr users,char* uname,char*  userinfo
+		char* homedir, char shell){
+
+		
+		for(int i = 0;i<users.length;i++){
+
+		}
+
+	//this adds new users to userarr
+
+}
+int gen_uuid(struct userarr users){
+
+}
+
+int gen_guid(struct userarr usere){
+
 }
 void edit_sudo(int argc, char *argv[]){
 	//I changed stuff make!
