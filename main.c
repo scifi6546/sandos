@@ -273,8 +273,8 @@ char *alloc_string(char* one, char* two){
 	temp = strcpy(temp,two);
 	return temp;
 }
-struct userarr add_user(struct userarr users,char* uname,char*  userinfo
-		char* homedir, char shell){
+struct userarr add_user(struct userarr users,char* uname,char*  userinfo,
+char* homedir, char shell){
 	struct user temp = mkuser();
 	temp.uname=strcpy(temp.uname,uname);	
 	temp.userinfo=strcpy(temp.userinfo,userinfo);
@@ -289,7 +289,14 @@ struct userarr add_user(struct userarr users,char* uname,char*  userinfo
 
 }
 int gen_uuid(struct userarr users){
-
+	time_t t;
+	srand(time(&t));
+	int random=(rand()%999+1);
+	for(int i=0;i<users.length;i++){
+		if(users.users[i].uuid=random)
+			gen_uuid(users);
+	}
+	return random
 }
 
 int gen_guid(struct userarr usere){
