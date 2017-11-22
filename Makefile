@@ -2,7 +2,7 @@ CC=gcc
 CFLAGS=-Wall 'pkg-config --libs --cflags gtk+-3.0'
 DEBUG=-g3
 VALGRIND=-g
-OBJ = main.o libsandos.o
+OBJ = main.o libsandos.o gui.o
 
 %.o: %.c $(DEPS)
 	$(CC) -c -o $@ $< $(CFLAGS)
