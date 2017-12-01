@@ -30,14 +30,14 @@ struct userarr{
 //declaring functions
 struct document loadfile(char *file_path);
 int finds(struct document doc, struct document find);
-struct document make_sand_st(int argc, char *argv[]);
-struct document concact(struct document start,
+struct document make_sand_st(char *user, char *app);
+struct document concat(struct document start,
 		struct document end);
 void f_write(char* file_path, struct document in);
 struct userarr find_user(struct document passwd);
 void analyze_users();
 struct user mkusr();
-void edit_sudo(int argc, char *argv[]);
+void edit_sudo(char* user, char *app);
 struct document mkpasswdst(struct userarr users);
 char* alloc_string(char* one, char* two);
 struct userarr set_ints(struct userarr users);
@@ -100,19 +100,17 @@ int finds(struct document doc,struct document find){
 	}
 	return 1;
 }
-struct document make_sand_st(int argc, char *argv[]){
+struct document make_sand_st(char* user, char *app){
 	struct document ret;
+	//argv[2]=application argv[1]=user
 	ret.length = 150;
 	char *out = calloc(ret.length,sizeof(char)*ret.length);
-	for(int i = 0; i<ret.length; i++){
-		out[i]='\0';
-	}
 	strcat(out,"ALL=(sandos_");
-	strcat(out,argv[1]);
+	strcat(out,user);
 	strcat(out,"_");
-	strcat(out,argv[2]);
+	strcat(out,app);
 	strcat(out,") NOPASSWD: /usr/bin");
-	strcat(out, argv[2]);
+	strcat(out,app);
 	ret.string = out;
 	return ret;
 	//I am doing what is below in the awefull mess above
@@ -309,27 +307,21 @@ int gen_guid(struct userarr users){
 	}
 	return  random;
 }
-void edit_sudo(int argc, char *argv[]){
+void edit_sudo(char *user,char *app){
 	//I changed stuff make!
 	struct document sudo = loadfile("thing");
 	struct document sand_find;
-	sand_find.string = "sandos";
-	sand_find.length = 7;
-	int is_sand = finds(sudo, sand_find);
+	struct document sand=make_sand_st(user,app);
+	int is_sand = finds(sudo, sand);
 	if(is_sand == 0){//why do I forget to put 2 =
 	       printf("already found I am stopping\n");
 	}
 	else{
-		struct document sand_st;
-		sand_st = make_sand_st(argc,argv);	
-		sudo = concat(sudo, sand_st);
 		f_write(sudoers_path, sudo);
-		//printf("arg[0]=%s\n", argv[0]);
-		
+		concat(sudo,sand);
+		f_write(sudoers_path,sand);
 	}
 }	
-int main(int argc, char *argv[]){
-	edit_sudo(argc, argv);
-	analyze_users();
-	return 0;
+void sandbox(char *user,char *app){
+	edit_sudo(user,app);
 }
