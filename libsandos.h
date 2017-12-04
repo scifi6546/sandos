@@ -21,7 +21,7 @@ struct userarr{
 };
 
 //declaring functions
-
+void sandbox(char*user, char *app);
 //insert highlevel functions
 
 #endif
