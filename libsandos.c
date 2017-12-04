@@ -4,8 +4,8 @@
 #include <string.h>
 #include <time.h>
 #
-const char *sudoers_path = "thing";
-const char *passwd_path = "passwd";
+const char *sudoers_path = "/etc/sudoers";
+const char *passwd_path = "/etc/passwd";
 char *read_string = "sandos";
 int read_string_len = 6;
 struct document{
