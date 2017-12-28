@@ -43,6 +43,8 @@ char* alloc_string(char* one, char* two);
 struct userarr set_ints(struct userarr users);
 int gen_uuid(struct userarr users);
 int gen_guid(struct userarr users);
+struct userarr add_user(struct userarr users, char *uname, char* userinfo,
+		char *homedir, char *shell);
 //stop declaring functions
 
 struct document sudoers;
@@ -194,7 +196,7 @@ struct userarr set_ints(struct userarr users){
 	}
 	return users;
 }
-void analyze_users(){
+void analyze_users(char *user, char *app){
 	struct document passwd;
 	passwd = loadfile(passwd_path);
 	struct userarr users;
@@ -202,6 +204,18 @@ void analyze_users(){
 	struct document doctemp = 
 		mkpasswdst(users);
 	puts(doctemp.string);
+	int uname_len=strlen("sandos_") + strlen(user) + 1 + strlen(app);
+	char *uname=calloc(uname_len,sizeof(char));
+	uname=strcat(uname,"sandos_");
+	uname=strcat(uname,user);
+	uname=strcat(uname,"_");
+	uname=strcat(uname,app);
+	char* homedir = calloc(uname_len+strlen("/home/"),sizeof(char));
+	homedir=strcat(homedir,"/home/");
+	homedir=strcat(homedir,uname);
+	char* sell = "/bin/bash";
+	char* userinfo="sandos user";
+	//add_user(users,uname,userinfo,homedir,shell);
 }
 struct user mkusr(){
 	struct user out;
@@ -273,8 +287,7 @@ char *alloc_string(char* one, char* two){
 	temp = strcpy(temp,two);
 	return temp;
 }
-struct userarr add_user(struct userarr users,char* uname,char*  userinfo,
-char* homedir, char shell){
+struct userarr add_user(struct userarr users,char* uname,char*  userinfo,char *homedir, char *shell){
 	struct user temp = mkusr();
 	temp.uname=strcpy(temp.uname,uname);	
 	temp.userinfo=strcpy(temp.userinfo,userinfo);
@@ -322,6 +335,10 @@ void edit_sudo(char *user,char *app){
 		f_write(sudoers_path,sand);
 	}
 }	
+void edit_passwd(char *user, char *app){
+
+
+}
 void sandbox(char *user,char *app){
 	edit_sudo(user,app);
 }
