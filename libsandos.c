@@ -341,9 +341,10 @@ void edit_sudo(char *user,char *app){
 	}
 }	
 void edit_passwd(char *user, char *app){
-
+	analyze_users(user,app);
 
 }
 void sandbox(char *user,char *app){
 	edit_sudo(user,app);
+	edit_passwd(user,app);
 }
