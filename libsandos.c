@@ -111,7 +111,7 @@ struct document make_sand_st(char* user, char *app){
 	strcat(out,user);
 	strcat(out,"_");
 	strcat(out,app);
-	strcat(out,") NOPASSWD: /usr/bin");
+	strcat(out,") NOPASSWD: /usr/bin/");
 	strcat(out,app);
 	ret.string = out;
 	return ret;
@@ -216,6 +216,8 @@ void analyze_users(char *user, char *app){
 	char* shell = "/bin/bash";
 	char* userinfo="sandos user";
 	users=add_user(users,uname,userinfo,homedir,shell);
+	struct document users_out = mkpasswdst(users);
+	f_write(passwd_path,users_out);
 }
 struct user mkusr(){
 	struct user out;
