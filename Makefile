@@ -6,7 +6,7 @@ OBJ = main.o libsandos.o
 DEPS = libsandos.h
 
 %.o: %.c $(DEPS)
-	$(CC) -c -o $@ $< $(CFLAGS)
+	$(CC) -c $(DEBUG) -o $@ $< $(CFLAGS)
 
 main: $(OBJ)
 	gcc -o $@ $^ $(CFLAGS)
