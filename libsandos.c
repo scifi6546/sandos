@@ -297,6 +297,7 @@ struct userarr add_user(struct userarr users,char* uname,char*  userinfo,char *h
 	temp.shell=strcpy(temp.shell,shell);
 	temp.uuid = gen_uuid(users);
 	temp.guid=gen_guid(users);
+	users.users=realloc(users.users,(sizeof(temp)+30)*users.length);
 	users.users[users.length]=temp;
 	users.length++;
 	//this adds new users to userarr
