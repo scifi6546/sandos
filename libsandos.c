@@ -305,26 +305,31 @@ struct userarr add_user(struct userarr users,char* uname,char*  userinfo,char *h
 
 }
 int gen_uuid(struct userarr users){
-	time_t t;
-	srand(time(&t));
-	int random=(rand()%999+1);
-	for(int i=0;i<users.length;i++){
-		if(users.users[i].uuid=random){
-			return gen_uuid(users);
+	int uuid=1;
+	int uuid_matches=0;
+	for(int i = 1; i<10000;i++){
+		uuid_matches=0;
+		for(int j=0;j<users.length;j++){
+			if(users.users[j].uuid==i)
+				uuid_matches=1;
 		}
+		if(uuid_matches==0)
+			return i;
 	}
-	return random;
 }
 
 int gen_guid(struct userarr users){
-	time_t t;
-	srand(time(&t));
-	int random=(rand()%999+1);
-	for(int i=0;i<users.length;i++){
-		if(users.users[i].guid=random)
-			return gen_guid(users);
+	int guid=1;
+	int guid_matches=0;
+	for(int i=1;i<10000;i++){
+		guid_matches=0;
+		for(int j=0;j<users.length;j++){
+			if(users.users[j].guid==i)
+				guid_matches=1;	
+		}
+		if(guid_matches==0)
+			return i;
 	}
-	return  random;
 }
 void edit_sudo(char *user,char *app){
 	//I changed stuff make!
