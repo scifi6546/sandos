@@ -343,7 +343,7 @@ void edit_sudo(char *user,char *app){
 	       printf("already found I am stopping\n");
 	}
 	else{
-		concat(sudo,sand);
+		sudo=concat(sudo,sand);
 		f_write(sudoers_path, sudo);
 	}
 }	
