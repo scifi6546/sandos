@@ -54,7 +54,7 @@ struct document loadfile(char *file_path){
 	int temp=0;
 	FILE *file = fopen(file_path,"r");
 	doc.length=10;
-	doc.string = (char *)malloc(doc.length*sizeof(char));
+	doc.string = (char *)calloc(doc.length,sizeof(*doc.string));
 	int len_doc_read = 0;
 	while(temp != EOF){
 		temp = fgetc(file);
