@@ -114,6 +114,7 @@ struct document make_sand_st(char* user, char *app){
 	strcat(out,") NOPASSWD: /usr/bin/");
 	strcat(out,app);
 	ret.string = out;
+	ret.length=strlen(ret.string);
 	return ret;
 	//I am doing what is below in the awefull mess above
 	//return "ALL=(sandos_" + argv[0] + "_" + argv[1] + ") NOPASSWD: /usr/bin" + argv[1];
@@ -342,8 +343,8 @@ void edit_sudo(char *user,char *app){
 	       printf("already found I am stopping\n");
 	}
 	else{
-		f_write(sudoers_path, sudo);
 		concat(sudo,sand);
+		f_write(sudoers_path, sudo);
 	}
 }	
 void edit_passwd(char *user, char *app){
