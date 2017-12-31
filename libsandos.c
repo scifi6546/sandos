@@ -336,7 +336,7 @@ int gen_guid(struct userarr users){
 }
 void edit_sudo(char *user,char *app){
 	//I changed stuff make!
-	struct document sudo = loadfile("thing");
+	struct document sudo = loadfile(sudoers_path);
 	struct document sand=make_sand_st(user,app);
 	int is_sand = finds(sudo, sand);
 	if(is_sand == 0){//why do I forget to put 2 =
