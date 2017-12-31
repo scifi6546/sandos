@@ -107,7 +107,8 @@ struct document make_sand_st(char* user, char *app){
 	//argv[2]=application argv[1]=user
 	ret.length = 150;
 	char *out = calloc(ret.length,sizeof(char)*ret.length);
-	strcat(out,"ALL=(sandos_");
+	strcat(out,user);
+	strcat(out," ALL=(sandos_");
 	strcat(out,user);
 	strcat(out,"_");
 	strcat(out,app);
