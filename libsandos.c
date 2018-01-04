@@ -118,7 +118,7 @@ struct document make_sand_st(char* user, char *app){
 	ret.length = 150;
 	char *out = calloc(ret.length,sizeof(char)*ret.length);
 	strcat(out,user);
-	strcat(out," ALL=(sandos_");
+	strcat(out,"	ALL=(sandos_");
 	strcat(out,user);
 	strcat(out,"_");
 	strcat(out,app);
@@ -360,7 +360,7 @@ char* mk_home_dir(char *user, char *app){
 	dirname=strcat(dirname,app);
 	mkdir(dirname,0755);
 	chown(dirname,sand_uuid,sand_guid);
-	return base_home_dir;
+	return dirname;
 	
 }
 void edit_sudo(char *user,char *app){
