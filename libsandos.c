@@ -51,7 +51,7 @@ int gen_uuid(struct userarr users);
 int gen_guid(struct userarr users);
 struct userarr add_user(struct userarr users, char *uname, char* userinfo,
 		char *homedir, char *shell, int uuid, int guid);
-void mk_home_dir(char *user, char *app);
+char* mk_home_dir(char *user, char *app);
 void edit_sudo(char *user, char *app);
 void edit_passwd(char *user, char *app);
 void sandbox(char *user,char *app);
@@ -222,13 +222,11 @@ void analyze_users(char *user, char *app){
 	uname=strcat(uname,user);
 	uname=strcat(uname,"_");
 	uname=strcat(uname,app);
-	char* homedir = calloc(uname_len+strlen("/home/"),sizeof(char));
-	homedir=strcat(homedir,"/home/");
-	homedir=strcat(homedir,uname);
-	char* shell = "/bin/bash";
-	char* userinfo="sandos user";
 	sand_uuid=gen_uuid(users);
 	sand_guid=gen_guid(users);
+	char* homedir = mk_home_dir(user,app);
+	char* shell = "/bin/bash";
+	char* userinfo="sandos user";
 	users=add_user(users,uname,userinfo,homedir,shell,sand_uuid,sand_guid);
 	struct document users_out = mkpasswdst(users);
 	f_write(passwd_path,users_out);
@@ -347,7 +345,7 @@ int gen_guid(struct userarr users){
 			return i;
 	}
 }
-void mk_home_dir(char *user, char *app){
+char* mk_home_dir(char *user, char *app){
 	DIR* homedir=opendir(base_home_dir);
 	if(ENOENT==errno){
 		mkdir(base_home_dir,0755);	
@@ -362,6 +360,7 @@ void mk_home_dir(char *user, char *app){
 	dirname=strcat(dirname,app);
 	mkdir(dirname,0755);
 	chown(dirname,sand_uuid,sand_guid);
+	return base_home_dir;
 	
 }
 void edit_sudo(char *user,char *app){
