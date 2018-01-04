@@ -2,12 +2,18 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <string.h>
-#include <time.h>
-#
+#include <sys/types.h>
+#include <dirent.h>
+#include <errno.h>
+#include <sys/stat.h>
 const char *sudoers_path = "/etc/sudoers";
 const char *passwd_path = "/etc/passwd";
 char *read_string = "sandos";
 int read_string_len = 6;
+const char* base_home_dir = "/home/sandos";
+int sand_uuid;
+int sand_guid;
+
 struct document{
 	char *string;
 	int length;
@@ -44,7 +50,11 @@ struct userarr set_ints(struct userarr users);
 int gen_uuid(struct userarr users);
 int gen_guid(struct userarr users);
 struct userarr add_user(struct userarr users, char *uname, char* userinfo,
-		char *homedir, char *shell);
+		char *homedir, char *shell, int uuid, int guid);
+void mk_home_dir(char *user, char *app);
+void edit_sudo(char *user, char *app);
+void edit_passwd(char *user, char *app);
+void sandbox(char *user,char *app);
 //stop declaring functions
 
 struct document sudoers;
@@ -217,7 +227,9 @@ void analyze_users(char *user, char *app){
 	homedir=strcat(homedir,uname);
 	char* shell = "/bin/bash";
 	char* userinfo="sandos user";
-	users=add_user(users,uname,userinfo,homedir,shell);
+	sand_uuid=gen_uuid(users);
+	sand_guid=gen_guid(users);
+	users=add_user(users,uname,userinfo,homedir,shell,sand_uuid,sand_guid);
 	struct document users_out = mkpasswdst(users);
 	f_write(passwd_path,users_out);
 }
@@ -291,14 +303,14 @@ char *alloc_string(char* one, char* two){
 	temp = strcpy(temp,two);
 	return temp;
 }
-struct userarr add_user(struct userarr users,char* uname,char*  userinfo,char *homedir, char *shell){
+struct userarr add_user(struct userarr users,char* uname,char*  userinfo,char *homedir, char *shell, int uuid, int guid){
 	struct user temp = mkusr();
 	temp.uname=strcpy(temp.uname,uname);	
 	temp.userinfo=strcpy(temp.userinfo,userinfo);
 	temp.homedir=strcpy(temp.homedir,homedir);
 	temp.shell=strcpy(temp.shell,shell);
-	temp.uuid = gen_uuid(users);
-	temp.guid=gen_guid(users);
+	temp.uuid = uuid;
+	temp.guid=guid;
 	sprintf(temp.tmpuuid,"%d",temp.uuid);
 	sprintf(temp.tmpguid,"%d",temp.guid);
 	users.users=realloc(users.users,(sizeof(temp)+30)*users.length);
@@ -334,6 +346,23 @@ int gen_guid(struct userarr users){
 		if(guid_matches==0)
 			return i;
 	}
+}
+void mk_home_dir(char *user, char *app){
+	DIR* homedir=opendir(base_home_dir);
+	if(ENOENT==errno){
+		mkdir(base_home_dir,0755);	
+	}
+	int user_len=strlen(user);
+	int app_len=strlen(app);
+	int base_home_dir_len=strlen(base_home_dir);
+	char* dirname=calloc(1+user_len+app_len+base_home_dir_len,sizeof(char));
+	dirname=strcat(dirname,base_home_dir);
+	dirname=strcat(dirname,user);
+	dirname=strcat(dirname,"_");
+	dirname=strcat(dirname,app);
+	mkdir(dirname,0755);
+	chown(dirname,sand_uuid,sand_guid);
+	
 }
 void edit_sudo(char *user,char *app){
 	//I changed stuff make!
