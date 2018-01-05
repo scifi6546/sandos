@@ -43,15 +43,19 @@ void f_write(char* file_path, struct document in);
 struct userarr find_user(struct document passwd);
 void analyze_users();
 struct user mkusr();
+char* make_uname(char *user, char *app);
+void usr_free(struct user in);
 void edit_sudo(char* user, char *app);
 struct document mkpasswdst(struct userarr users);
 char* alloc_string(char* one, char* two);
 struct userarr set_ints(struct userarr users);
 int gen_uuid(struct userarr users);
 int gen_guid(struct userarr users);
+struct userarr rm_user(struct userarr users, char *uname);
 struct userarr add_user(struct userarr users, char *uname, char* userinfo,
 		char *homedir, char *shell, int uuid, int guid);
 char* mk_home_dir(char *user, char *app);
+void remove_sandbox(char *user, char *app);
 void edit_sudo(char *user, char *app);
 void edit_passwd(char *user, char *app);
 void sandbox(char *user,char *app);
@@ -209,6 +213,16 @@ struct userarr set_ints(struct userarr users){
 	}
 	return users;
 }
+char* make_uname(char* user, char* app){
+	int uname_len=strlen("sandos_") + strlen(user) + 1
+		+strlen(app);
+	char *uname=calloc(uname_len,sizeof(char));
+	uname=strcat(uname,"sandos_");
+	uname=strcat(uname,user);
+	uname=strcat(uname,"_");
+	uname=strcat(uname,app);
+	return uname;
+}
 void analyze_users(char *user, char *app){
 	struct document passwd;
 	passwd = loadfile(passwd_path);
@@ -217,12 +231,15 @@ void analyze_users(char *user, char *app){
 	struct document doctemp = 
 		mkpasswdst(users);
 	puts(doctemp.string);
+	char* uname=make_uname(user, app);
+/*
 	int uname_len=strlen("sandos_") + strlen(user) + 1 + strlen(app);
 	char *uname=calloc(uname_len,sizeof(char));
 	uname=strcat(uname,"sandos_");
 	uname=strcat(uname,user);
 	uname=strcat(uname,"_");
 	uname=strcat(uname,app);
+*/
 	sand_uuid=gen_uuid(users);
 	sand_guid=gen_guid(users);
 	char* homedir = mk_home_dir(user,app);
@@ -244,6 +261,31 @@ struct user mkusr(){
 	out.guid=0;
 	out.uuid=0;
 	return out;
+}
+void usr_free(struct user in){
+	free(in.uname);
+	free(in.homedir);
+	free(in.shell);
+	free(in.tmpuuid);
+	free(in.tmpguid);
+	free(in.passwd);
+	free(in.userinfo);
+}
+struct userarr rm_user(struct userarr users, char* uname){
+	int user_index=-1;
+	for(int i=0; i<users.length; i++){
+		if(users.users[i].uname==uname){
+			user_index=i;	
+		}
+	}
+	if(user_index==-1){
+		return users;
+	}
+	usr_free(users.users[user_index]);
+	for(int	i=user_index+1;i<users.length;i++){
+		users.users[i-1]=users.users[i];
+	}
+	return users;
 }
 struct document mkpasswdst(struct userarr users){
 	struct document doc;
@@ -364,6 +406,9 @@ char* mk_home_dir(char *user, char *app){
 	chown(dirname,sand_uuid,sand_guid);
 	return dirname;
 	
+}
+void remove_sandbox(char *user, char *app){
+	int i=1;
 }
 void edit_sudo(char *user,char *app){
 	//I changed stuff make!
