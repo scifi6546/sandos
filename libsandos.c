@@ -124,6 +124,7 @@ struct document make_sand_st(char* user, char *app){
 	strcat(out,app);
 	strcat(out,") NOPASSWD: /usr/bin/");
 	strcat(out,app);
+	strcat(out,"\n");
 	ret.string = out;
 	ret.length=strlen(ret.string);
 	return ret;
