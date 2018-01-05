@@ -257,7 +257,7 @@ struct document mkpasswdst(struct userarr users){
 				temp.length=strlen(temp.string);
 			}
 			if(j==1){
-				temp.string=alloc_string(temp.string,users.users[i].uname);
+				temp.string=alloc_string(temp.string,"x");
 				temp.length=strlen(temp.string);
 			}
 			if(j==2){
