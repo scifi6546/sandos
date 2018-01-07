@@ -55,6 +55,7 @@ struct userarr rm_user(struct userarr users, char *uname);
 struct userarr add_user(struct userarr users, char *uname, char* userinfo,
 		char *homedir, char *shell, int uuid, int guid);
 char* mk_home_dir(char *user, char *app);
+void remove_home_dur(char* home_dir);
 void remove_sandbox(char *user, char *app);
 void edit_sudo(char *user, char *app);
 void edit_passwd(char *user, char *app);
@@ -232,14 +233,6 @@ void analyze_users(char *user, char *app){
 		mkpasswdst(users);
 	puts(doctemp.string);
 	char* uname=make_uname(user, app);
-/*
-	int uname_len=strlen("sandos_") + strlen(user) + 1 + strlen(app);
-	char *uname=calloc(uname_len,sizeof(char));
-	uname=strcat(uname,"sandos_");
-	uname=strcat(uname,user);
-	uname=strcat(uname,"_");
-	uname=strcat(uname,app);
-*/
 	sand_uuid=gen_uuid(users);
 	sand_guid=gen_guid(users);
 	char* homedir = mk_home_dir(user,app);
@@ -406,6 +399,9 @@ char* mk_home_dir(char *user, char *app){
 	chown(dirname,sand_uuid,sand_guid);
 	return dirname;
 	
+}
+void remove_home_dir(char *homedir){
+
 }
 void remove_sandbox(char *user, char *app){
 	int i=1;
