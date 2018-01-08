@@ -22,5 +22,5 @@ struct userarr{
 
 //declaring functions
 void sandbox(char*user, char *app);
-
+void remove_sandbox(char *user, char *app);
 #endif

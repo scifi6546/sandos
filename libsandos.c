@@ -400,8 +400,33 @@ char* mk_home_dir(char *user, char *app){
 	return dirname;
 	
 }
-void remove_home_dir(char *homedir){
-
+void remove_dir(char *dir){
+	DIR *current_DIR=opendir(dir);
+	char *current_dir=calloc(strlen(dir)+1,sizeof(char));
+	strcat(current_dir,dir);
+	strcat(current_dir,"/");
+	struct dirent* temp_dirent;
+	struct stat temp_stat;
+	char *temp_dir;
+	char *name;
+	int size;
+	while(0==0){
+		temp_dirent = readdir(current_DIR);	
+		size=strlen(temp_dirent->d_name)+strlen(current_dir);
+		name=calloc(size,sizeof(char));
+		strcat(name,current_dir);
+		strcat(name,temp_dirent->d_name);
+		stat(name,&temp_stat);	
+		if(temp_dirent->d_name!="."&& temp_dirent->d_name!=".."){
+			if(S_ISDIR(temp_stat.st_mode)){
+				remove_dir(name);
+			}else if(S_ISREG(temp_stat.st_mode)){
+				unlink(name);
+			}
+		}			
+		
+	}
+	
 }
 void remove_sandbox(char *user, char *app){
 	int i=1;

@@ -2,6 +2,12 @@
 #include <stdio.h>
 #include "gui.h"
 int main(int argc, char *argv[]){
-	sandbox(argv[1],argv[2]);
-	puts("hi there");
+	if(argc==2){
+		sandbox(argv[1],argv[2]);
+	}
+	if(argc==3){
+		remove_sandbox(argv[1],argv[2]);
+
+	}
+	return 0;
 }
