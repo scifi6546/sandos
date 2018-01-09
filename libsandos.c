@@ -404,7 +404,6 @@ void remove_dir(char *dir){
 	strcat(current_dir,"/");
 	struct dirent* temp_dirent;
 	struct stat temp_stat;
-	char *temp_dir;
 	char *name;
 	int size;
 	while(0==0){
@@ -429,7 +428,6 @@ void remove_dir(char *dir){
 	free(temp_dirent);
 	free(current_DIR);
 	free(current_dir);
-	free(temp_dir);
 	free(name);
 	
 }
