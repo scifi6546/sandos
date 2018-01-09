@@ -418,9 +418,9 @@ void remove_dir(char *dir){
 		if(strcmp(temp_dirent->d_name,".")!=0 && strcmp(temp_dirent->d_name,"..")!=0){
 			if(S_ISDIR(temp_stat.st_mode)){
 				remove_dir(name);
+				rmdir(name);
 			}else if(S_ISREG(temp_stat.st_mode)){
 				unlink(name);
-				rmdir(name);
 			}
 		}			
 		
