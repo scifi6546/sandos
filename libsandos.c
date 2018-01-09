@@ -438,6 +438,7 @@ void remove_sandbox(char *user, char *app){
 	strcat(delete_dir,base_home_dir);
 	strcat(delete_dir,"/");
 	strcat(delete_dir,username);
+	remove_dir(delete_dir);
 }
 void edit_sudo(char *user,char *app){
 	//I changed stuff make!
