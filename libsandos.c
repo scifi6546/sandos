@@ -386,7 +386,7 @@ char* mk_home_dir(char *user, char *app){
 	if(ENOENT==errno){
 		mkdir(base_home_dir,0755);	
 	}
-	char uname=make_uname(user,app);
+	char *uname=make_uname(user,app);
 	int base_home_dir_len=strlen(base_home_dir);
 	char* dirname=calloc(strlen(uname)+1+base_home_dir_len,sizeof(char));
 	dirname=strcat(dirname,base_home_dir);
