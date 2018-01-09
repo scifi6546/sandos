@@ -409,6 +409,8 @@ void remove_dir(char *dir){
 	int size;
 	while(0==0){
 		temp_dirent = readdir(current_DIR);	
+		if(temp_dirent==NULL)
+			break;
 		size=strlen(temp_dirent->d_name)+strlen(current_dir);
 		name=calloc(size,sizeof(char));
 		strcat(name,current_dir);
