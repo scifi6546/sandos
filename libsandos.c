@@ -439,6 +439,12 @@ void remove_sandbox(char *user, char *app){
 	strcat(delete_dir,"/");
 	strcat(delete_dir,username);
 	remove_dir(delete_dir);
+	struct document passwd;
+	passwd=loadfile(passwd_path);
+	struct userarr users=analyze_users(passwd);
+	users=rm_user(username);
+	passwd=mkpasswdst(users);
+	f_write(passwd);
 }
 void edit_sudo(char *user,char *app){
 	//I changed stuff make!
