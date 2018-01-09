@@ -416,7 +416,7 @@ void remove_dir(char *dir){
 		strcat(name,current_dir);
 		strcat(name,temp_dirent->d_name);
 		stat(name,&temp_stat);	
-		if((temp_dirent->d_name!=".")&& (temp_dirent->d_name!="..")){
+		if(strcmp(temp_dirent->d_name,".")!=0 && strcmp(temp_dirent->d_name,"..")!=0){
 			if(S_ISDIR(temp_stat.st_mode)){
 				remove_dir(name);
 			}else if(S_ISREG(temp_stat.st_mode)){
