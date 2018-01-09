@@ -386,15 +386,12 @@ char* mk_home_dir(char *user, char *app){
 	if(ENOENT==errno){
 		mkdir(base_home_dir,0755);	
 	}
-	int user_len=strlen(user);
-	int app_len=strlen(app);
+	char uname=make_uname(user,app);
 	int base_home_dir_len=strlen(base_home_dir);
-	char* dirname=calloc(2+user_len+app_len+base_home_dir_len,sizeof(char));
+	char* dirname=calloc(strlen(uname)+1+base_home_dir_len,sizeof(char));
 	dirname=strcat(dirname,base_home_dir);
 	dirname=strcat(dirname,"/");
-	dirname=strcat(dirname,user);
-	dirname=strcat(dirname,"_");
-	dirname=strcat(dirname,app);
+	dirname=strcat(dirname,uname);
 	mkdir(dirname,0755);
 	chown(dirname,sand_uuid,sand_guid);
 	return dirname;
@@ -422,14 +419,25 @@ void remove_dir(char *dir){
 				remove_dir(name);
 			}else if(S_ISREG(temp_stat.st_mode)){
 				unlink(name);
+				rmdir(name);
 			}
 		}			
 		
 	}
+	free(temp_dirent);
+	free(current_DIR);
+	free(current_dir);
+	free(temp_dir);
+	free(name);
 	
 }
 void remove_sandbox(char *user, char *app){
-	int i=1;
+	char * username=make_uname(user,app);
+	int length=strlen(username) + strlen(base_home_dir);
+	char * delete_dir=calloc(length,sizeof(char));
+	strcat(delete_dir,base_home_dir);
+	strcat(delete_dir,"/");
+	strcat(delete_dir,username);
 }
 void edit_sudo(char *user,char *app){
 	//I changed stuff make!
