@@ -441,10 +441,10 @@ void remove_sandbox(char *user, char *app){
 	remove_dir(delete_dir);
 	struct document passwd;
 	passwd=loadfile(passwd_path);
-	struct userarr users=analyze_users(passwd);
-	users=rm_user(username);
+	struct userarr users=find_user(passwd);
+	users=rm_user(users,username);
 	passwd=mkpasswdst(users);
-	f_write(passwd);
+	f_write(passwd_path,passwd);
 }
 void edit_sudo(char *user,char *app){
 	//I changed stuff make!
