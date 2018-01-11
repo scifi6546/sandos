@@ -267,7 +267,7 @@ void usr_free(struct user in){
 struct userarr rm_user(struct userarr users, char* uname){
 	int user_index=-1;
 	for(int i=0; i<users.length; i++){
-		if(strcmp(users.users[i].uname,uname==0)){
+		if(strcmp(users.users[i].uname,uname)==0){
 			user_index=i;	
 		}
 	}
