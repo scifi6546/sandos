@@ -278,6 +278,7 @@ struct userarr rm_user(struct userarr users, char* uname){
 	for(int	i=user_index+1;i<users.length;i++){
 		users.users[i-1]=users.users[i];
 	}
+	users.length-=1;
 	return users;
 }
 struct document mkpasswdst(struct userarr users){
