@@ -267,7 +267,7 @@ void usr_free(struct user in){
 struct userarr rm_user(struct userarr users, char* uname){
 	int user_index=-1;
 	for(int i=0; i<users.length; i++){
-		if(strcmp(users.users[i].uname,uname)){
+		if(users.users[i].uname==uname){
 			user_index=i;	
 		}
 	}
@@ -404,23 +404,22 @@ void remove_dir(char *dir){
 	strcat(current_dir,"/");
 	struct dirent* temp_dirent;
 	struct stat temp_stat;
+	char *temp_dir;
 	char *name;
 	int size;
 	while(0==0){
 		temp_dirent = readdir(current_DIR);	
-		if(temp_dirent==NULL)
-			break;
 		size=strlen(temp_dirent->d_name)+strlen(current_dir);
 		name=calloc(size,sizeof(char));
 		strcat(name,current_dir);
 		strcat(name,temp_dirent->d_name);
 		stat(name,&temp_stat);	
-		if(strcmp(temp_dirent->d_name,".")!=0 && strcmp(temp_dirent->d_name,"..")!=0){
+		if(temp_dirent->d_name!="."&& temp_dirent->d_name!=".."){
 			if(S_ISDIR(temp_stat.st_mode)){
 				remove_dir(name);
-				rmdir(name);
 			}else if(S_ISREG(temp_stat.st_mode)){
 				unlink(name);
+				rmdir(name);
 			}
 		}			
 		
@@ -428,6 +427,7 @@ void remove_dir(char *dir){
 	free(temp_dirent);
 	free(current_DIR);
 	free(current_dir);
+	free(temp_dir);
 	free(name);
 	
 }
@@ -438,13 +438,11 @@ void remove_sandbox(char *user, char *app){
 	strcat(delete_dir,base_home_dir);
 	strcat(delete_dir,"/");
 	strcat(delete_dir,username);
-	remove_dir(delete_dir);
-	struct document passwd;
-	passwd=loadfile(passwd_path);
-	struct userarr users=find_user(passwd);
-	users=rm_user(users,username);
-	passwd=mkpasswdst(users);
-	f_write(passwd_path,passwd);
+	struct document user_doc=loadfile(passwd_path);
+	struct userarr users = find_user(user_doc);
+	rm_user(users,username);
+	user_doc = mkpasswdst(users);
+	f_write(passwd_path,user_doc);
 }
 void edit_sudo(char *user,char *app){
 	//I changed stuff make!
