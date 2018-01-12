@@ -8,7 +8,6 @@
 #include <sys/stat.h>
 const char *sudoers_path = "/etc/sudoers";
 const char *passwd_path = "/etc/passwd";
-char *read_string = "sandos";
 int read_string_len = 6;
 const char* base_home_dir = "/home/sandos";
 int sand_uuid;
@@ -214,6 +213,39 @@ struct userarr set_ints(struct userarr users){
 	}
 	return users;
 }
+void copy_user(struct user src, struct user dest){
+	int length = strlen(src.uname);
+	realloc(dest.uname, length);
+	strcpy(src.uname,dest.uname);
+
+	length=strlen(src.passwd);
+	realloc(dest.passwd,length);
+	strcpy(src.passwd,dest.passwd);
+
+	dest.uuid=src.uuid;
+
+	length=strlen(src.tmpuuid);	
+	realloc(dest.tmpuuid,length);
+	strcpy(src.tmpuuid,dest.tmpuuid);
+
+	dest.guid=src.guid;
+
+	length=strlen(src.tmpguid);
+	realloc(dest.tmpguid,length);
+	strcpy(src.tmpguid,dest.tmpguid);
+
+	length=strlen(src.homedir);
+	realloc(dest.homedir,length);
+	strcpy(src.homedir,dest.homedir);
+
+	length=strlen(src.shell);
+	realloc(dest.shell,length);
+	strcpy(src.shell,dest.shell);
+
+	length=strlen(src.userinfo);
+	realloc(dest.userinfo,length);
+	strcpy(src.userinfo,dest.userinfo);	
+}
 char* make_uname(char* user, char* app){
 	int uname_len=strlen("sandos_") + strlen(user) + 1
 		+strlen(app);
@@ -251,6 +283,7 @@ struct user mkusr(){
 	out.tmpguid=calloc(60,sizeof(char));
 	out.passwd=calloc(60,sizeof(char));
 	out.userinfo=calloc(60,sizeof(char));
+	out.userinfo=calloc(60,sizeof(char));
 	out.guid=0;
 	out.uuid=0;
 	return out;
@@ -276,7 +309,7 @@ struct userarr rm_user(struct userarr users, char* uname){
 	}
 	usr_free(users.users[user_index]);
 	for(int	i=user_index+1;i<users.length;i++){
-		users.users[i-1]=users.users[i];
+		copy_user(users.users[i],users.users[i-1]);
 	}
 	users.length-=1;
 	return users;
@@ -388,7 +421,7 @@ char* mk_home_dir(char *user, char *app){
 		mkdir(base_home_dir,0755);	
 	}
 	char *uname=make_uname(user,app);
-	int base_home_dir_len=strlen(base_home_dir);
+	int base_home_dir_len = strlen(base_home_dir);
 	char* dirname=calloc(strlen(uname)+1+base_home_dir_len,sizeof(char));
 	dirname=strcat(dirname,base_home_dir);
 	dirname=strcat(dirname,"/");
