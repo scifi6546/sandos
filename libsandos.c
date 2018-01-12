@@ -309,7 +309,8 @@ struct userarr rm_user(struct userarr users, char* uname){
 	}
 	usr_free(users.users[user_index]);
 	for(int	i=user_index+1;i<users.length;i++){
-		copy_user(users.users[i],users.users[i-1]);
+		if(i=!users.length)
+			copy_user(users.users[i],users.users[i-1]);
 	}
 	users.length-=1;
 	return users;
