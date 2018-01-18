@@ -367,9 +367,8 @@ struct document mkpasswdst(struct userarr users){
 	return doc;
 }
 char *alloc_string(char* one, char* two){
-	char* temp;
-	temp=(char *)calloc(strlen(two)+1,sizeof(char));
-	temp = strcpy(temp,two);
+	one=(char *)calloc(strlen(two)+1,sizeof(char));
+	strcpy(one,two);
 	return temp;
 }
 struct userarr add_user(struct userarr users,char* uname,char*  userinfo,char *homedir, char *shell, int uuid, int guid){
