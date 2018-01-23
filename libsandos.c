@@ -248,7 +248,7 @@ void copy_user(struct user src, struct user dest){
 }
 char* make_uname(char* user, char* app){
 	int uname_len=strlen("sandos_") + strlen(user) + 1
-		+strlen(app);
+		+strlen(app) + 1;
 	char *uname=calloc(uname_len,sizeof(char));
 	uname=strcat(uname,"sandos_");
 	uname=strcat(uname,user);
