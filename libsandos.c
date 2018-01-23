@@ -422,7 +422,7 @@ char* mk_home_dir(char *user, char *app){
 	}
 	char *uname=make_uname(user,app);
 	int base_home_dir_len = strlen(base_home_dir);
-	char* dirname=calloc(strlen(uname)+1+base_home_dir_len,sizeof(char));
+	char* dirname=calloc(strlen(uname)+1+base_home_dir_len + 1,sizeof(char));
 	dirname=strcat(dirname,base_home_dir);
 	dirname=strcat(dirname,"/");
 	dirname=strcat(dirname,uname);
