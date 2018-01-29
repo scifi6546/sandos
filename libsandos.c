@@ -204,7 +204,6 @@ struct userarr find_user(struct document passwd){//this puts /etc/passwd info in
 	user_array.users = users;
 	user_array.length = usernum;
 	user_array=set_ints(user_array);
-	free(temps);
 	return user_array;
 }
 struct userarr set_ints(struct userarr users){
@@ -249,7 +248,7 @@ void copy_user(struct user src, struct user dest){
 }
 char* make_uname(char* user, char* app){
 	int uname_len=strlen("sandos_") + strlen(user) + 1
-		+strlen(app);
+		+strlen(app) + 1;
 	char *uname=calloc(uname_len,sizeof(char));
 	uname=strcat(uname,"sandos_");
 	uname=strcat(uname,user);
