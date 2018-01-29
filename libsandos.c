@@ -204,6 +204,7 @@ struct userarr find_user(struct document passwd){//this puts /etc/passwd info in
 	user_array.users = users;
 	user_array.length = usernum;
 	user_array=set_ints(user_array);
+	free(temps);
 	return user_array;
 }
 struct userarr set_ints(struct userarr users){
@@ -248,7 +249,7 @@ void copy_user(struct user src, struct user dest){
 }
 char* make_uname(char* user, char* app){
 	int uname_len=strlen("sandos_") + strlen(user) + 1
-		+strlen(app) + 1;
+		+strlen(app);
 	char *uname=calloc(uname_len,sizeof(char));
 	uname=strcat(uname,"sandos_");
 	uname=strcat(uname,user);
@@ -261,9 +262,6 @@ void analyze_users(char *user, char *app){
 	passwd = loadfile(passwd_path);
 	struct userarr users;
 	users = find_user(passwd);
-	struct document doctemp = 
-		mkpasswdst(users);
-	puts(doctemp.string);
 	char* uname=make_uname(user, app);
 	sand_uuid=gen_uuid(users);
 	sand_guid=gen_guid(users);
@@ -273,6 +271,9 @@ void analyze_users(char *user, char *app){
 	users=add_user(users,uname,userinfo,homedir,shell,sand_uuid,sand_guid);
 	struct document users_out = mkpasswdst(users);
 	f_write(passwd_path,users_out);
+	free(homedir);
+	free(shell);
+	free(userinfo);
 }
 struct user mkusr(){
 	struct user out;
@@ -422,7 +423,7 @@ char* mk_home_dir(char *user, char *app){
 	}
 	char *uname=make_uname(user,app);
 	int base_home_dir_len = strlen(base_home_dir);
-	char* dirname=calloc(strlen(uname)+1+base_home_dir_len + 1,sizeof(char));
+	char* dirname=calloc(strlen(uname)+1+base_home_dir_len,sizeof(char));
 	dirname=strcat(dirname,base_home_dir);
 	dirname=strcat(dirname,"/");
 	dirname=strcat(dirname,uname);
@@ -467,7 +468,7 @@ void remove_dir(char *dir){
 }
 void remove_sandbox(char *user, char *app){
 	char * username=make_uname(user,app);
-	int length=strlen(username) + strlen(base_home_dir) + 2;
+	int length=strlen(username) + strlen(base_home_dir);
 	char * delete_dir=calloc(length,sizeof(char));
 	strcat(delete_dir,base_home_dir);
 	strcat(delete_dir,"/");
