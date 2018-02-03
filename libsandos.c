@@ -468,7 +468,7 @@ void remove_dir(char *dir){
 }
 void remove_sandbox(char *user, char *app){
 	char * username=make_uname(user,app);
-	int length=strlen(username) + strlen(base_home_dir);
+	int length=strlen(username) + strlen(base_home_dir + 2);
 	char * delete_dir=calloc(length,sizeof(char));
 	strcat(delete_dir,base_home_dir);
 	strcat(delete_dir,"/");
