@@ -272,7 +272,7 @@ void analyze_users(char *user, char *app){
 	f_write(passwd_path,users_out);
 	free(homedir);
 	//free(shell);
-	free(userinfo);
+	//free(userinfo);
 }
 struct user mkusr(){
 	struct user out;
